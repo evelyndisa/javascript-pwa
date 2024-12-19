@@ -19,3 +19,9 @@
 .ml-80 { margin-left: 80px; }
 .ml-90 { margin-left: 90px; }
 .ml-100 { margin-left: 100px; }
+
+.menu{
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+}
