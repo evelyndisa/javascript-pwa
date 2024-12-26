@@ -77,3 +77,6 @@ if ('serviceWorker' in navigator) {
 }
 ```
 
+### Paginas utiles:
+https://web.dev/articles/add-manifest?hl=es
+https://developer.mozilla.org/es/docs/Web/Manifest
