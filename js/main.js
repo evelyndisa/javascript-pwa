@@ -116,8 +116,23 @@ function configurarListenersMenu() {
     })
 }
 
+function registrarServiceWorker(){
+    if('serviceWorker' in navigator) {
+        this.navigator.serviceWorker.register('sw.js').then((registration)=>{
+            console.log('servise worker registrado', registration)
+        }).catch((err)=>{
+            console.log('servise worker NO registrado', err)
+        })
+        
+        //si adentro de un objeto, tiene el metodo llamado service
+        //this hace referencia al navegador
+    } else console.error('service worker no soportad en este navegador')
+   
+}
+
 function start() {
-    console.warn( document.querySelector('title').innerText )
+    
+    registrarServiceWorker()
 
     configurarListenersMenu()
     renderLista()
@@ -128,3 +143,4 @@ function start() {
 /*               EJECUCIÓN                */
 /* -------------------------------------- */
 start()
+
