@@ -91,4 +91,4 @@ https://manifest-gen.netlify.app/
 https://developer.chrome.com/docs/devtools/progressive-web-apps?utm_source=lighthouse&utm_medium=devtools&hl=es-419
 
 - screenshots
-https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots
+https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots   
