@@ -2,145 +2,108 @@
 /*          VARIABLES GLOBALES            */
 /* -------------------------------------- */
 let listaProductos = [
-    { nombre: 'Carne', cantidad: 2, precio: 12.34 },
-    { nombre: 'Pan', cantidad: 3, precio: 34.56 },
-    { nombre: 'Fideos', cantidad: 4, precio: 78.90 },
-    { nombre: 'Leche', cantidad: 5, precio: 87.65 },
-    { nombre: 'Crema', cantidad: 6, precio: 43.21 },
-]
-
-let crearLista = true
-let ul
+];
 
 /* -------------------------------------- */
 /*          FUNCIONES GLOBALES            */
 /* -------------------------------------- */
-function borrarProd(index) {
-    //console.log('borrarProd', index)
+async function borrarProd(id) {
+  await apiProducts.del(id)
 
-    listaProductos.splice(index, 1)
-    renderLista()
+  renderLista();
 }
 
-function cambiarValorProd(que, cual, el) {
+async function cambiarValorProd(que, id, el) {
+  const cual = listaProductos.findIndex((p) => p.id == id);
+  const valor = el.value;
 
-    const valor = el.value
+  listaProductos[cual][que] =
+    que == "cantidad" ? parseInt(valor) : parseFloat(valor);
 
-    listaProductos[cual][que] = que == 'cantidad'? parseInt(valor) : parseFloat(valor)
+  const producto = listaProductos[cual];
+  await apiProducts.put(id, producto);
 }
 
-function renderLista() {
-    if(crearLista) {
-        ul = document.createElement('ul')
-        ul.classList.add('demo-list-icon', 'mdl-list')
-    }
+async function renderLista() {
+  const plantilla = await $.ajax({ url: "plantillas/productos.hbs" });
+  const template = Handlebars.compile(plantilla);
 
-    ul.innerHTML = ''
-    listaProductos.forEach( (prod, index) => {
-        ul.innerHTML += 
-        `
-            <li class="mdl-list__item">
-                <!-- ícono del producto -->
-                <span class="mdl-list__item-primary-content w-10">
-                    <i class="material-icons mdl-list__item-icon">shopping_cart</i>
-                </span>
-    
-                <!-- nombre del producto -->
-                <span class="mdl-list__item-primary-content w-30">
-                    ${prod.nombre}
-                </span>
-    
-                <!-- cantidad de producto -->
-                <span class="mdl-list__item-primary-content w-20">
-                    <!-- Textfield with Floating Label -->
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input onblur="cambiarValorProd('cantidad',${index},this)" value="${prod.cantidad}" class="mdl-textfield__input" type="text" id="cantidad-${index}">
-                        <label class="mdl-textfield__label" for="cantidad-${index}">Cantidad</label>
-                    </div>
-                </span>
-    
-                <!-- precio de producto -->
-                <span class="mdl-list__item-primary-content w-20 ml-item">
-                    <!-- Textfield with Floating Label -->
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input onblur="cambiarValorProd('precio',${index},this)" value="${prod.precio}" class="mdl-textfield__input" type="text" id="precio-${index}">
-                        <label class="mdl-textfield__label" for="precio-${index}">Precio</label>
-                    </div>
-                </span>
-    
-                <!-- botón de borrado individual del producto en la lista -->
-                <span class="mdl-list__item-primary-content w-20 ml-item">
-                    <!-- Colored FAB button with ripple -->
-                    <button onclick="borrarProd(${index})"
-                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-                        <i class="material-icons">remove_shopping_cart</i>
-                    </button>
-                </span>
-            </li>
-        `
-    })
+  listaProductos = await apiProducts.get();
+  console.log(listaProductos);
+  const html = template({ listaProductos: listaProductos });
 
-    if(crearLista) {
-        document.getElementById('lista').appendChild(ul)
-    }
-    else {
-        componentHandler.upgradeElements(ul)
-    }
+  $("#lista").html(html);
 
-    crearLista = false
+  const ul = $("#contenedor-lista");
+  componentHandler.upgradeElements(ul);
 }
 
 function configurarListenersMenu() {
-    /* botón agregar producto */
-    document.getElementById('btn-entrada-producto').addEventListener('click', () => {
-        const input = document.getElementById('ingreso-producto')
-        const nombre = input.value
+  $("#btn-entrada-producto").click(async () => {
+    const input = $("#ingreso-producto");
+    const nombre = input.val();
 
-        //console.log(nombre)
-        const producto = { nombre: nombre, cantidad: 1, precio: 0 }
-        //console.log(producto)
-        listaProductos.push(producto)
+    const producto = { nombre: nombre, cantidad: 1, precio: 0 };
+    listaProductos.push(producto);
 
-        renderLista()
+    await apiProducts.post(producto);
 
-        input.value = ''
-    })
+    renderLista();
 
-    /* botón borrar todo */
-    document.getElementById('btn-borrar-productos').addEventListener('click', () => {
-        
-        if(confirm('¿Desea borrar todos los productos?')) {
-            listaProductos = []
-            renderLista()
-        }
-    })
+    input.val("");
+  });
+
+  $("#btn-borrar-productos").click(() => {
+    if (listaProductos.length) {
+      var dialog = $("dialog")[0];
+      dialog.showModal();
+    }
+  });
 }
 
-function registrarServiceWorker(){
-    if('serviceWorker' in navigator) {
-        this.navigator.serviceWorker.register('sw.js').then((registration)=>{
-            console.log('servise worker registrado', registration)
-        }).catch((err)=>{
-            console.log('servise worker NO registrado', err)
-        })
-        
-        //si adentro de un objeto, tiene el metodo llamado service
-        //this hace referencia al navegador
-    } else console.error('service worker no soportad en este navegador')
-   
+function registrarServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    this.navigator.serviceWorker
+      .register("sw.js")
+      .then((reg) => {
+        //console.log("Service Worker registrado.", reg);
+      })
+      .catch((err) => {
+        console.error("Service Worker NO registrado.", err);
+      });
+  } else {
+    console.error("Service Worker no soportado en este navegador.");
+  }
+}
+
+function iniDialog() {
+  let dialog = $("dialog")[0];
+  if (!dialog.showModal) {
+    dialogPolyfill.registerDialog(dialog);
+  }
+  $(".aceptar").click(async function () {
+    dialog.close();
+
+    // listaProductos = [];
+    await apiProducts.deleteAll();
+
+    renderLista();
+  });
+  $(".cancelar").click(function () {
+    dialog.close();
+  });
 }
 
 function start() {
-    
-    registrarServiceWorker()
+  registrarServiceWorker();
 
-    configurarListenersMenu()
-    renderLista()
+  iniDialog();
+  configurarListenersMenu();
+  renderLista();
 }
-
 
 /* -------------------------------------- */
 /*               EJECUCIÓN                */
 /* -------------------------------------- */
-start()
 
+$(document).ready(start);

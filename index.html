@@ -5,35 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App SuperLista</title>
-    <!-- https://docs.emmet.io/cheat-sheet/ -->
 
-    <!-- https://getmdl.io/ -->
-    <!-- https://fonts.google.com/icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
 
     <link rel="stylesheet" href="css/estilos.css">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3F5185">
-    <!-- <base href="/javascript-pwa/" /> -->
+    <meta name="theme-color" content="#3F51B5">
 </head>
 
 <body>
-
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
-                <!-- Title -->
                 <span class="mdl-layout-title">Super Lista Productos</span>
-                <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
-                <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <!-- <a class="mdl-navigation__link" href="">Link 1</a>
-                    <a class="mdl-navigation__link" href="">Link 2</a>
-                    <a class="mdl-navigation__link" href="">Link 3</a>
-                    <a class="mdl-navigation__link" href="">Link 4</a> -->
                 </nav>
             </div>
         </header>
@@ -49,10 +37,30 @@
         <main class="mdl-layout__content">
             <div class="page-content">
                 <!-- Your content goes here -->
-                 <!-- ------------------------------------- -->
-                <!--                BANNER                   -->
                 <!-- ------------------------------------- -->
-                <img src="./images/super.jpg" alt="banner compras super" class="banner"/>
+                <!--               BANNER                  -->
+                <!-- ------------------------------------- -->
+
+                <img src="super.jpg" alt="Banner de la App" class="banner">
+
+                <!-- ------------------------------------- -->
+                <!--     BARRA DE PROGRESO BORRAR TODO     -->
+                <!-- ------------------------------------- -->
+
+                <progress min="0" max="100" value="0"></progress>
+
+                <!-- ------------------------------------- -->
+                <!--          MENÚ MODAL BORAR TODO        -->
+                <!-- ------------------------------------- -->
+
+                <dialog class="mdl-dialog">
+                    <h5 class="mdl-dialog__title">Confirma borrar todo?</h5>
+                    <br>
+                    <div class="mdl-dialog__actions">
+                        <button type="button" class="mdl-button aceptar">Aceptar</button>
+                        <button type="button" class="mdl-button cancelar">Cancelar</button>
+                    </div>
+                </dialog>
                 <!-- ------------------------------------- -->
                 <!--                MENÚ                   -->
                 <!-- ------------------------------------- -->
@@ -63,7 +71,6 @@
                         <label class="mdl-textfield__label" for="ingreso-producto">Ingrese Prod</label>
                     </div>
 
-                    <!-- botón para agregar el producto a la lista -->
                     <div class="w-30 ml-item">
                         <button id="btn-entrada-producto"
                             class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary">
@@ -71,9 +78,7 @@
                         </button>
                     </div>
 
-                    <!-- botón para borrar todos los productos -->
                     <div class="w-30">
-                        <!-- Accent-colored raised button with ripple -->
                         <button id="btn-borrar-productos"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Borrar <i class="material-icons">delete_sweep</i>
@@ -90,7 +95,12 @@
         </main>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="js/api.js"></script>
     <script src="js/main.js"></script>
 </body>
 
