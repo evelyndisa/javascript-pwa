@@ -1,64 +1,77 @@
-const apiProductos = (function() {
+// Se define un módulo autoejecutable que gestiona las operaciones con la API de productos.
+// permite realizar operaciones CRUD (Crear, Read, Update, Delete)
+const apiProductos = (function () {
 
-  function getURL(id) {
-      return 'https://665b3ad4003609eda4604381.mockapi.io/api/productos/' + (id || '')
-  }
+    // Genera la URL para acceder a los recursos de la API. Si se pasa un ID, se incluye en la URL.
+    // sin el ID, se accede a la lista completa
+    function getURL(id) {
+        return 'https://665b3ad4003609eda4604381.mockapi.io/api/productos/' + (id || '')
+    }
 
-  async function get() {
-      try {
-          const prods = await $.ajax({url: getURL()})
-          return prods
-      }
-      catch(error) {
-          console.error('ERROR GET', error)
-          const prods = leerListaProductos()
-          console.log(prods)
-          return prods
-      }
-  }
+    // Obtiene todos los productos de la API.
+    async function get() {
+        try {
+            const prods = await $.ajax({ url: getURL() }) // Realiza una solicitud GET a la API.
+            return prods // Devuelve los productos obtenidos.
+        }
+        catch (error) {
+            console.error('ERROR GET', error)
+            const prods = leerListaProductos() // Obtiene productos de un almacenamiento local como respaldo.
+            console.log(prods)
+            return prods // Devuelve los productos locales.
+        }
+    }
 
-  async function post(producto) {
-      const prodAgregado = await $.ajax({url: getURL(), method: 'post', data: producto})
-      return prodAgregado
-  }
 
-  async function put(id, producto) {
-      const prodActualizado = await $.ajax({url: getURL(id), method: 'put', data: producto})
-      return prodActualizado
-  }
+    // Agrega un nuevo producto a la API.
+    async function post(producto) {
+        const prodAgregado = await $.ajax({ url: getURL(), method: 'post', data: producto }) // Realiza una solicitud POST.
+        return prodAgregado // Devuelve el producto agregado.
+    }
 
-  async function del(id) {
-      const prodEliminado = await $.ajax({url: getURL(id), method: 'delete'})
-      return prodEliminado
-  }
 
-  async function deleteAll() {
-      const progress = $('progress')
-      progress.css('display','block')
+    // Actualiza un producto existente en la API.
+    async function put(id, producto) {
+        const prodActualizado = await $.ajax({ url: getURL(id), method: 'put', data: producto }) // Realiza una solicitud PUT.
+        return prodActualizado // Devuelve el producto actualizado.
+    }
 
-      let porcentaje = 0
-      for(let i=0; i<listaProductos.length; i++) {
-          porcentaje = parseInt((i * 100) / listaProductos.length)
-          console.log(porcentaje + '%')
-          progress.val(porcentaje)
 
-          const { id } = listaProductos[i]
-          await del(id)
-      }
-      porcentaje = 100
-      console.log(porcentaje + '%')
-      progress.val(porcentaje)
+    // Elimina un producto específico de la API.
+    async function del(id) {
+        const prodEliminado = await $.ajax({ url: getURL(id), method: 'delete' }) // Realiza una solicitud DELETE.
+        return prodEliminado // Devuelve el producto eliminado.
+    }
 
-      setTimeout(() => {
-          progress.css('display','none')
-      },2000)
-  }
+    // Elimina todos los productos de la API uno por uno.
+    async function deleteAll() {
+        const progress = $('progress') // Selecciona el elemento de progreso (barra de carga).
+        progress.css('display', 'block') // Muestra la barra de progreso.
 
-  return {
-      get: () => get(),
-      post: producto => post(producto),
-      put: (id,producto) => put(id,producto),
-      delete: id => del(id),
-      deleteAll: () => deleteAll(),
-  }
+        let porcentaje = 0
+        for (let i = 0; i < listaProductos.length; i++) {
+            porcentaje = parseInt((i * 100) / listaProductos.length) // Calcula el porcentaje de progreso.
+            console.log(porcentaje + '%')
+            progress.val(porcentaje) // Actualiza el valor de la barra de progreso.
+
+            const { id } = listaProductos[i] // Obtiene el ID del producto.
+            await del(id) // Elimina el producto con el ID actual.
+        }
+        porcentaje = 100
+        console.log(porcentaje + '%')
+        progress.val(porcentaje) // Completa la barra de progreso.
+
+        // Oculta la barra de progreso después de 2 segundos.
+        setTimeout(() => {
+            progress.css('display', 'none')
+        }, 2000)
+    }
+
+    return {
+        get: () => get(), // Permite obtener productos.
+        post: producto => post(producto), // Permite agregar un producto.
+        put: (id, producto) => put(id, producto), // Permite actualizar un producto.
+        delete: id => del(id), // Permite eliminar un producto por ID.
+        deleteAll: () => deleteAll(), // Permite eliminar todos los productos.
+    }
 })()
