@@ -92,3 +92,29 @@ https://developer.chrome.com/docs/devtools/progressive-web-apps?utm_source=light
 
 - screenshots
 https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots   
+
+
+--------------------------------------------
+
+## MANIFEST
+Es un archivo de configuración en formato JSON que contiene metadatos sobre la aplicación web. Este archivo proporciona información necesaria para que la aplicación pueda comportarse como una aplicación nativa en dispositivos móviles o de escritorio.
+
+### Propósito del manifest.json
+Identidad de la aplicación:
+
+- Define el nombre, descripción e iconos de la aplicación, lo que permite que los usuarios la identifiquen fácilmente.
+Apariencia:
+
+- Especifica colores, estilos y pantallas de inicio, mejorando la experiencia visual al integrarse con el sistema operativo.
+Instalación:
+
+- Permite a los usuarios "instalar" la aplicación en sus dispositivos, añadiendo un icono en la pantalla de inicio (como en las apps nativas).
+Experiencia offline:
+
+- En combinación con un Service Worker, permite cargar recursos esenciales incluso cuando no hay conexión a Internet.
+display: Modo de presentación de la aplicación:
+
+"fullscreen": Ocupa toda la pantalla.
+"standalone": Parece una app nativa, sin barra de navegación del navegador.
+"minimal-ui": Incluye una barra mínima de controles.
+"browser": Se muestra como una página normal en el navegador.
